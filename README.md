@@ -17,7 +17,7 @@ Tested wrapped drivers include browser drivers (ChromeDriver, FirefoxDriver…) 
 | Download Binaries    | See the [latest release](https://github.com/Neotys-Labs/Selenium-WebDriver-Java/releases/latest)
 
 ## Documentation
-Read the [Integration with Selenium](https://www.neotys.com/documents/doc/neoload/latest/en/html/#8266.htm) and [Integration with Java & Jamo Solutions](https://www.neotys.com/documents/doc/neoload/latest/en/html/#8240.htm) guides for more on these integrations.
+Read the [Integration with Selenium](https://www.neotys.com/documents/doc/neoload/latest/en/html/#8266.htm).
 
 
 
