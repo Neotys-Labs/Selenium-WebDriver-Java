@@ -2,6 +2,10 @@
                        *  NeoLoad Selenium Proxy ChangeLog  *
                        **************************************
 
+Version 2.2.0 (November 07, 2017)
+=============
+- UPDATED: Added automatic transaction management via WebDriverEventListener, fluent extension via FluentWebDriver, updated to Selenium 3 #PSB
+
 Version 2.1.0 (June 14, 2017)
 =============
 - IMPROVED: Improved End User Experience: add the possibility to specify UserPath, Transaction and automatically send timers for Transactions.
