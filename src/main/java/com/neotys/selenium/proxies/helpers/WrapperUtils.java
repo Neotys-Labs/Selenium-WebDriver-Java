@@ -50,7 +50,7 @@ import com.neotys.selenium.proxies.RemoteWebElementWrapper;
 import com.neotys.selenium.proxies.TargetLocatorProxy;
 import com.neotys.selenium.proxies.WebDriverProxy;
 import com.neotys.selenium.proxies.WebElementProxy;
-import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.*;
 
 /**
  * @author ajohnson
@@ -73,7 +73,7 @@ public class WrapperUtils {
      * @param instanceToWrap
      * @return any special instances that need to be wrapped
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "deprecation"})
     public <T> T wrapIfNecessary(final WebDriver webDriver, final Object instanceToWrap) {
         if (instanceToWrap instanceof Mouse) {
             return (T)new MouseProxy(webDriver, (Mouse) instanceToWrap, proxyConfig).getProxy();
@@ -157,6 +157,7 @@ public class WrapperUtils {
      * @param webDriver
      * @return
      */
+    @SuppressWarnings({"deprecation"})
     public static String getURL(final Selenium webDriver) {
         String url = "";
         try {
@@ -172,6 +173,7 @@ public class WrapperUtils {
      * @param webDriver
      * @return
      */
+    @SuppressWarnings({"deprecation"})
     public static String getTitle(final Selenium webDriver) {
         String title = "";
         try {

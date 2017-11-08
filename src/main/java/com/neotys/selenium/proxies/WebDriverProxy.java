@@ -87,8 +87,9 @@ public class WebDriverProxy {
      * @param webDriver the webDriver should use NeoLoad as Proxy
      * @param designManager
      */
-    static <T extends WebDriver> T newDesignInstance(final WebDriver webDriver, final DesignManager designManager) {
+    static <T extends WebDriver> T newDesignInstance(final WebDriver webDriver, final DesignManager designManager, final Optional<String> userPath) {
         final SeleniumProxyConfig proxyConfig = newSeleniumProxyConfig(webDriver);
+        proxyConfig.setUserPathName(userPath);
         return newInstance(webDriver, proxyConfig, newDesignMethodHandler(proxyConfig, webDriver, designManager));
     }
 
@@ -121,11 +122,14 @@ public class WebDriverProxy {
             throw new RuntimeException(e);
         }
 
+        NLWebDriver ret;
         if (!proxyConfig.isUsingPerfecto(webDriver)) {
-            return (T) nlWebDriver;
+            ret = nlWebDriver;
+        } else {
+            final WrapperUtils wrapperUtils = new WrapperUtils(proxyConfig);
+            ret = new NLPerfectoWebDriver((RemoteWebDriver) webDriver, nlWebDriver, wrapperUtils);
         }
 
-        final WrapperUtils wrapperUtils = new WrapperUtils(proxyConfig);
-        return (T) new NLPerfectoWebDriver((RemoteWebDriver) webDriver, nlWebDriver, wrapperUtils);
+        return (T) new NLTransactableWebDriver(ret); // PSB wrap instance in transactable logistics
     }
 }

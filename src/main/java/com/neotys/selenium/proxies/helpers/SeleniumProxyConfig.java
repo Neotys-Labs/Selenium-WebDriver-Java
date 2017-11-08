@@ -35,12 +35,21 @@ import com.neotys.rest.dataexchange.client.DataExchangeAPIClientFactory;
 import com.neotys.rest.dataexchange.model.Context;
 import com.neotys.rest.dataexchange.model.ContextBuilder;
 import com.neotys.rest.dataexchange.model.TimerBuilder;
+import com.neotys.rest.design.builder.JSONDefinitionBuilder;
+import com.neotys.rest.design.builder.UserPathBuilder;
 import com.neotys.rest.design.client.DesignAPIClient;
 import com.neotys.rest.design.client.DesignAPIClientFactory;
+import com.neotys.rest.design.model.GetChildrenParams;
+import com.neotys.rest.design.model.GetElementsParams;
 import com.neotys.rest.design.model.SetContainerParams;
+import com.neotys.rest.design.model.element.Element;
+import com.neotys.rest.design.model.element.ElementType;
 import com.neotys.rest.error.NeotysAPIException;
 import com.neotys.selenium.proxies.CustomProxyConfig;
+import com.neotys.selenium.proxies.RunnableThrowsExceptions;
+import com.neotys.selenium.proxies.ScopableTransactor;
 import com.neotys.selenium.proxies.TransactionModifier;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.openqa.selenium.Capabilities;
@@ -63,7 +72,7 @@ import static com.neotys.selenium.proxies.helpers.ModeHelper.Mode.END_USER_EXPER
 import static com.neotys.selenium.proxies.helpers.ModeHelper.*;
 
 
-public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, TransactionModifier {
+public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, TransactionModifier, ScopableTransactor {
 
 	private static final String TRANSACTION_TIMER_NAME = "Timer";
 
@@ -124,6 +133,55 @@ public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, Transac
 	public static final String OPT_CAPABILITIES_BROWSER_NAME = OPT_CAPABILITIES_PREFIX + "browser.name";
 	public static final String OPT_CAPABILITIES_BROWSER_VERSION = OPT_CAPABILITIES_PREFIX + "browser.version";
 	public static final String OPT_CAPABILITIES_LOCATION = OPT_CAPABILITIES_PREFIX + "location";
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static int getW3CStandardComplianeLevel(final WebDriver driver) {
+		return 1; // PSB
+		/*
+		Response response = driver.execute(DriverCommand.GET_ALL_SESSIONS);
+		ArrayList sessionsList = (ArrayList) response.getValue();
+		int size = sessionsList.size();
+		if (size > 0) {
+			// Here it will get the first sesion container ,if you have multiply
+			// sesssion ,it always get the top sessions in the session
+			// containers
+			Map<String, Object> rawCapabilities = (Map<String, Object>) sessionsList.get(sessionsList.size() - 1);
+
+			DesiredCapabilities returnedCapabilities = new DesiredCapabilities();
+			for (Map.Entry<String, Object> entry : rawCapabilities.entrySet()) {
+				// Handle the platform later
+				if (CapabilityType.PLATFORM.equals(entry.getKey())) {
+					continue;
+				}
+				returnedCapabilities.setCapability(entry.getKey(), entry.getValue());
+			}
+			String platformString = (String) rawCapabilities.get(CapabilityType.PLATFORM);
+			Platform platform;
+			try {
+				if (platformString == null || "".equals(platformString)) {
+					platform = Platform.ANY;
+				} else {
+					platform = Platform.valueOf(platformString);
+				}
+			} catch (IllegalArgumentException e) {
+				// The server probably responded with a name matching the
+				// os.name
+				// system property. Try to recover and parse this.
+				platform = Platform.extractFromSysProperty(platformString);
+			}
+			returnedCapabilities.setPlatform(platform);
+
+			capabilities = returnedCapabilities;
+			String oldsessionid = (String) rawCapabilities.get("id");
+			sessionId = new SessionId(oldsessionid);
+			logger.info("Found Existing sessionId: " + oldsessionid
+					+ " from session container,and emulate all the operations in this session.");
+			if (response.getStatus() == null) {
+				w3cComplianceLevel = 1;
+			}
+		}
+		*/
+	}
 
 	public enum PathNamingPolicy {
 		/** Parse the URL to create a path. */
@@ -579,10 +637,12 @@ public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, Transac
 	}
 
 	public void setUserPathName(final Optional<String> userPathName){
+
 		this.userPathName = userPathName;
 	}
 
 	public Optional<String> getUserPathName() {
+
 		return userPathName;
 	}
 
@@ -640,5 +700,33 @@ public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, Transac
 			transactionName = null;
 			timerBuilder = null;
 		}
+	}
+
+	@Override // unused
+	public void startTransaction(String name, RunnableThrowsExceptions fSteps) throws Exception {
+		throw new NotImplementedException("SeleniumProxyConfig.startTransaction is not to be called.");
+	}
+
+	// TODO: figure out why API isn't providing metadata like 'type' attributes
+	public String[] getTransactionNames() {
+		if(DESIGN.equals(ModeHelper.getMode()) && getDesignAPIClient().isPresent()
+			|| END_USER_EXPERIENCE.equals(ModeHelper.getMode()) && getDesignAPIClient().isPresent()) {
+			try {
+				DesignAPIClient client = getDesignAPIClient().get();
+				final String actionContainerUID = client.getElements(new GetElementsParams.GetElementsParamsBuilder().path(
+						getUserPathName().get() + "|Actions"
+				).build()).get(0).getUID();
+				List<String> containers = new ArrayList<>();
+				for(final Element element : client.getChildren(new GetChildrenParams.GetChildrenParamsBuilder().uid(actionContainerUID).build())){
+					System.out.println(element.getJSON());
+					//if(ElementType.TRANSACTION.equals(element.getType())) // without metadata from the API, who knows?
+						containers.add(element.getName());
+				}
+				return containers.toArray(new String[containers.size()]);
+			} catch (final GeneralSecurityException | IOException | NeotysAPIException | URISyntaxException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return new String[] {};
 	}
 }

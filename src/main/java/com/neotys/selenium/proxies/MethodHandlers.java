@@ -56,7 +56,7 @@ public class MethodHandlers {
 				try {
 					if (!SeleniumProxyConfig.isEnabled()) {
 						// if we're calling a method on our wrapper then handle it.
-						if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class) || method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
+						if (isProxyableMethod(method)) {
 							return method.invoke(proxyConfig, args);
 						}
 						return method.invoke(webDriver, args);
@@ -70,20 +70,20 @@ public class MethodHandlers {
 		};
 	}
 
+	private static boolean isProxyableMethod(Method method) {
+		return method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)
+				|| method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)
+				|| (method.getDeclaringClass().isAssignableFrom(ScopableTransactor.class) && method.getName().equals("getTransactionNames"));
+	}
+
 	static MethodHandler newDesignMethodHandler(final SeleniumProxyConfig proxyConfig, final WebDriver webDriver, final DesignManager designManager) {
 		return new MethodHandler() {
 			@Override
 			public Object invoke(final Object proxy, final Method method, Method proceed, final Object[] args) throws Throwable {
 				try {
-					if (method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
+					if (isProxyableMethod(method)) {
 						return method.invoke(proxyConfig, args);
 					}
-
-					// if we're calling a method on our wrapper then handle it.
-					if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)) {
-						return method.invoke(proxyConfig, args);
-					}
-
 					return method.invoke(webDriver, args);
 				} catch (final InvocationTargetException e) {
 					throw e.getCause();

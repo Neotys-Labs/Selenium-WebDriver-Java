@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
+import com.neotys.selenium.proxies.helpers.SeleniumProxyConfig;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
@@ -45,6 +46,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
 
 import com.neotys.selenium.proxies.helpers.WrapperUtils;
+import org.seleniumhq.selenium.fluent.FluentMatcher;
+import org.seleniumhq.selenium.fluent.FluentWebDriver;
 
 public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	
@@ -78,10 +81,11 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 
 	/**
 	 * @return
-	 * @see org.openqa.selenium.remote.RemoteWebDriver#getW3CStandardComplianceLevel()
+	 * @see org.openqa.selenium.remote.RemoteWebDriver#getW3CStandardComplianceLevel() // supported by v2, not v3
 	 */
+	@Deprecated
 	public int getW3CStandardComplianceLevel() {
-		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getW3CStandardComplianceLevel());
+		return wrapperUtils.wrapIfNecessary(webDriver, SeleniumProxyConfig.getW3CStandardComplianeLevel(this));
 	}
 
 	/**
@@ -471,4 +475,22 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	public String getRegexToCleanURLs() {
 		return webDriver.getRegexToCleanURLs();
 	}
+
+	@Override
+	public void startTransaction(String name, RunnableThrowsExceptions fSteps) throws Exception {
+		webDriver.startTransaction(name, fSteps);
+	}
+
+	@Override
+	public String[] getTransactionNames() {
+		return webDriver.getTransactionNames();
+	}
+
+	@Override
+	public FluentWebDriver fluent() {
+		return webDriver.fluent();
+	}
+
+	@Override
+	public FluentMatcher textContains(String textToMatch) { return webDriver.textContains(textToMatch); }
 }

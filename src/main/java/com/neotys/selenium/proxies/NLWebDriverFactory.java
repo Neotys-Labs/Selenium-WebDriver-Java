@@ -165,7 +165,7 @@ public class NLWebDriverFactory {
 			case DESIGN:
 				final DesignManager designManager = new DesignManager(userPath.or(DEFAULT_USER_PATH), projectPath, paramBuilderProvider);
 				designManager.start();
-				return WebDriverProxy.newDesignInstance(webDriver, designManager);
+				return WebDriverProxy.newDesignInstance(webDriver, designManager, userPath);
 			case NO_API:
 			default:
 				return WebDriverProxy.newNoAPIInstance(webDriver);

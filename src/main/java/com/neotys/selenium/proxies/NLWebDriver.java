@@ -29,6 +29,6 @@ package com.neotys.selenium.proxies;
 
 import org.openqa.selenium.WebDriver;
 
-public interface NLWebDriver extends WebDriver, CustomProxyConfig, TransactionModifier {
+public interface NLWebDriver extends WebDriver, CustomProxyConfig, TransactionModifier, ScopableTransactor, FluencyProvider {
 
 }
