@@ -9,7 +9,7 @@ Tested wrapped drivers include browser drivers (ChromeDriver, FirefoxDriver…) 
 | Property          | Value             |
 | ----------------    | ----------------   |
 | Maturity           | Stable|
-| Author             | Neotys Partner Team |
+| Author             | Neotys |
 | License           | [BSD Simplified](https://www.neotys.com/documents/legal/bsd-neotys.txt) |
 | NeoLoad         | 5.3 (Enterprise or Professional Edition w/ Integration & Advanced Usage and NeoLoad Web option required)|
 | Requirements | Java Client for Data Exchange API and Java Client for Design API (See &lt;NeoLoad install folder&gt;/api).|
