@@ -63,10 +63,10 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 
 	private static final List<String> METHODS_ALWAYS_SEND = WebElementProxy.METHODS_ALWAYS_SEND;
 
-	public RemoteWebElementWrapper(final WebDriver webDriver, final RemoteWebElement original, final SeleniumProxyConfig proxyConfig) throws Exception {
+	public RemoteWebElementWrapper(final WebDriver webDriver, final RemoteWebElement original, final SeleniumProxyConfig proxyConfig){
 		this.webDriver = webDriver;
 		this.proxyConfig = proxyConfig;
-		this.proxySendHelper = new ProxySendHelper(proxyConfig, webDriver);
+		this.proxySendHelper = new ProxySendHelper(proxyConfig);
 		this.wrapperUtils = new WrapperUtils(proxyConfig);
 		this.original = original;
 	}
@@ -100,7 +100,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, (Object[])null);
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, (Object[])null);
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return (String) proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, (Object[])null);
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}
 	}
 
@@ -149,7 +149,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return (String) proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{name});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -165,7 +165,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{by});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -181,7 +181,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{by});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -197,7 +197,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -213,7 +213,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -229,7 +229,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -245,7 +245,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -261,7 +261,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -277,7 +277,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -293,7 +293,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -309,7 +309,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -325,7 +325,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -341,7 +341,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -357,7 +357,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -373,7 +373,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -389,7 +389,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -405,7 +405,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -421,7 +421,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -437,7 +437,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 			return proxySendHelper.sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, Collections.<String>emptyList(),
 					webDriver, original, method, new Object[]{using});
 		} catch (final IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException("Issue with NeoLoad proxy.", e);
+			throw new NeotysWrappingException("Issue with NeoLoad proxy.", e);
 		}	
 	}
 
@@ -464,6 +464,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getId()
 	 */
+	@Override
 	public String getId() {
 		return original.getId();
 	}
@@ -472,6 +473,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @param keysToSend
 	 * @see org.openqa.selenium.remote.RemoteWebElement#sendKeys(java.lang.CharSequence[])
 	 */
+	@Override
 	public void sendKeys(CharSequence... keysToSend) {
 		original.sendKeys(keysToSend);
 	}
@@ -480,6 +482,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * 
 	 * @see org.openqa.selenium.remote.RemoteWebElement#clear()
 	 */
+	@Override
 	public void clear() {
 		original.clear();
 	}
@@ -488,6 +491,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#isSelected()
 	 */
+	@Override
 	public boolean isSelected() {
 		return original.isSelected();
 	}
@@ -496,6 +500,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#isEnabled()
 	 */
+	@Override
 	public boolean isEnabled() {
 		return original.isEnabled();
 	}
@@ -504,6 +509,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getText()
 	 */
+	@Override
 	public String getText() {
 		return original.getText();
 	}
@@ -513,6 +519,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getCssValue(java.lang.String)
 	 */
+	@Override
 	public String getCssValue(String propertyName) {
 		return original.getCssValue(propertyName);
 	}
@@ -522,6 +529,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		return original.equals(obj);
 	}
@@ -530,6 +538,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return original.hashCode();
 	}
@@ -538,6 +547,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#isDisplayed()
 	 */
+	@Override
 	public boolean isDisplayed() {
 		return original.isDisplayed();
 	}
@@ -546,6 +556,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getLocation()
 	 */
+	@Override
 	public Point getLocation() {
 		return original.getLocation();
 	}
@@ -554,6 +565,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getSize()
 	 */
+	@Override
 	public Dimension getSize() {
 		return original.getSize();
 	}
@@ -562,6 +574,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getRect()
 	 */
+	@Override
 	public Rectangle getRect() {
 		return original.getRect();
 	}
@@ -570,6 +583,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getCoordinates()
 	 */
+	@Override
 	public Coordinates getCoordinates() {
 		return original.getCoordinates();
 	}
@@ -580,6 +594,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @throws WebDriverException
 	 * @see org.openqa.selenium.remote.RemoteWebElement#getScreenshotAs(org.openqa.selenium.OutputType)
 	 */
+	@Override
 	public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
 		return original.getScreenshotAs(outputType);
 	}
@@ -588,6 +603,7 @@ public class RemoteWebElementWrapper extends RemoteWebElement {
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebElement#toString()
 	 */
+	@Override
 	public String toString() {
 		return original.toString();
 	}

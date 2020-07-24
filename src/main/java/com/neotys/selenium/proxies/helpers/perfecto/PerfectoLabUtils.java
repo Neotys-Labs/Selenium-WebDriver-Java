@@ -40,16 +40,18 @@ import com.google.common.base.Charsets;
 
 public class PerfectoLabUtils {
 
+	private PerfectoLabUtils(){
+	}
+
 	/**
 	 * Download the report. 
 	 * type - pdf, html, csv, xml
 	 * Example: downloadReport(driver, "pdf", "C:\\test\\report");
 	 * @param driver
 	 * @param type
-	 * @param fileName
 	 * @return
 	 */
-	public static String downloadReport(RemoteWebDriver driver, String type, String fileName) {
+	public static String downloadReport(RemoteWebDriver driver, String type) {
 		String command = "mobile:report:download"; 
 		Map<String, Object> params = new HashMap<>(); 
 		params.put("type", type); 
@@ -65,34 +67,33 @@ public class PerfectoLabUtils {
 	 * downloadAttachment(driver, "video", "C:\\test\\report\\video", "flv");
 	 * downloadAttachment(driver, "image", "C:\\test\\report\\images", "jpg");
 	 */
-	public static void downloadAttachment(RemoteWebDriver driver, String type, String fileName, String suffix) throws IOException {
-		try {
+	public static void downloadAttachment(RemoteWebDriver driver, String type, String fileName, String suffix){
 			String command = "mobile:report:attachment";
 			boolean done = false;
 			int index = 0;
 
 			while (!done) {
-				Map<String, Object> params = new HashMap<>();	
+				Map<String, Object> params = new HashMap<>();
 
 				params.put("type", type);
 				params.put("index", Integer.toString(index));
 
-				String attachment = (String)driver.executeScript(command, params);
+				String attachment = (String) driver.executeScript(command, params);
 
-				if (attachment == null) { 
-					done = true; 
+				if (attachment == null) {
+					done = true;
+				} else {
+					File file = new File(fileName + index + "." + suffix);
+					try (BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file))) {
+						byte[] bytes = OutputType.BYTES.convertFromBase64Png(attachment);
+						output.write(bytes);
+						index++;
+					} catch (IOException ex) {
+						System.out.println("Got exception " + ex);
+						return;
+					}
 				}
-				else { 
-					File file = new File(fileName + index + "." + suffix); 
-					BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file)); 
-					byte[] bytes = OutputType.BYTES.convertFromBase64Png(attachment);	
-					output.write(bytes); 
-					output.close(); 
-					index++; }
 			}
-		} catch (Exception ex) { 
-			System.out.println("Got exception " + ex); 
-		}
 	}
 	
 }

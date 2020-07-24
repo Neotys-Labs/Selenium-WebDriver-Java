@@ -33,7 +33,6 @@ import javassist.util.proxy.MethodHandler;
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,10 @@ import java.util.List;
 /**
  * Created by anouvel on 03/11/2016.
  */
-public class MethodHandlers {
+class MethodHandlers {
+
+	private MethodHandlers(){
+	}
 
 	private static final List<String> METHODS_SEND_ON_EXCEPTION_ONLY = Arrays.asList("findElements", "findElement");
 
@@ -50,71 +52,62 @@ public class MethodHandlers {
 	private static final List<String> METHODS_SET_LAST_ACTION = Arrays.asList("findElements", "findElement");
 
 	static MethodHandler newEueMethodHandler(final SeleniumProxyConfig proxyConfig, final WebDriver webDriver) {
-		return new MethodHandler() {
-			@Override
-			public Object invoke(final Object proxy, final Method method, Method proceed, final Object[] args) throws Throwable {
-				try {
-					if (!SeleniumProxyConfig.isEnabled()) {
-						// if we're calling a method on our wrapper then handle it.
-						if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class) || method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
-							return method.invoke(proxyConfig, args);
-						}
-						return method.invoke(webDriver, args);
+		return (proxy, method, proceed, args) -> {
+			try {
+				if (!SeleniumProxyConfig.isEnabled()) {
+					// if we're calling a method on our wrapper then handle it.
+					if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class) || method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
+						return method.invoke(proxyConfig, args);
 					}
-					return new ProxySendHelper(proxyConfig, webDriver).sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY,
-							METHODS_SET_LAST_ACTION, webDriver, webDriver, method, args);
-				} catch (final InvocationTargetException e) {
-					throw e.getCause();
+					return method.invoke(webDriver, args);
 				}
+				return new ProxySendHelper(proxyConfig).sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY,
+						METHODS_SET_LAST_ACTION, webDriver, webDriver, method, args);
+			} catch (final InvocationTargetException e) {
+				throw e.getCause();
 			}
 		};
 	}
 
 	static MethodHandler newDesignMethodHandler(final SeleniumProxyConfig proxyConfig, final WebDriver webDriver, final DesignManager designManager) {
-		return new MethodHandler() {
-			@Override
-			public Object invoke(final Object proxy, final Method method, Method proceed, final Object[] args) throws Throwable {
-				try {
-					if (method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
-						return method.invoke(proxyConfig, args);
-					}
+		return (proxy, method, proceed, args) -> {
+			try {
+				if (method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
+					return method.invoke(proxyConfig, args);
+				}
 
-					// if we're calling a method on our wrapper then handle it.
-					if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)) {
-						return method.invoke(proxyConfig, args);
-					}
+				// if we're calling a method on our wrapper then handle it.
+				if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)) {
+					return method.invoke(proxyConfig, args);
+				}
 
-					return method.invoke(webDriver, args);
-				} catch (final InvocationTargetException e) {
-					throw e.getCause();
-				} finally {
-					if ("quit".equals(method.getName())) {
-						// stop the recording.
-						designManager.stop();
-					}
+				return method.invoke(webDriver, args);
+			} catch (final InvocationTargetException e) {
+				throw e.getCause();
+			} finally {
+				if ("quit".equals(method.getName())) {
+					// stop the recording.
+					designManager.stop();
 				}
 			}
 		};
 	}
 
 	static MethodHandler newNoApiMethodHandler(final SeleniumProxyConfig proxyConfig, final WebDriver webDriver){
-		return new MethodHandler() {
-			@Override
-			public Object invoke(final Object proxy, final Method method, Method proceed, final Object[] args) throws Throwable {
-				if (method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
-					// nothing to do.
-					return null;
-				}
+		return (proxy, method, proceed, args) -> {
+			if (method.getDeclaringClass().isAssignableFrom(TransactionModifier.class)) {
+				// nothing to do.
+				return null;
+			}
 
-				try {
-					// if we're calling a method on our wrapper then handle it.
-					if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)) {
-						return method.invoke(proxyConfig, args);
-					}
-					return method.invoke(webDriver, args);
-				} catch (final InvocationTargetException e) {
-					throw e.getCause();
+			try {
+				// if we're calling a method on our wrapper then handle it.
+				if (method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class)) {
+					return method.invoke(proxyConfig, args);
 				}
+				return method.invoke(webDriver, args);
+			} catch (final InvocationTargetException e) {
+				throw e.getCause();
 			}
 		};
 	}

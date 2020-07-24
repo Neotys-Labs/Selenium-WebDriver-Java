@@ -29,6 +29,8 @@ package com.neotys.selenium.proxies;
 
 import com.neotys.selenium.proxies.helpers.SeleniumProxyConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -45,7 +47,8 @@ public class NavigationProxyTest {
     /** Verify that there's no UnsupportedOperationException. for bug 8896.
      * @throws Throwable
      */
-//    @Test
+    @Test
+    @Ignore
     public void testNavigateToUnsupportedOperationException() throws Throwable {
         final WebDriver htmlUnit = new HtmlUnitDriver();
         final NLWebDriver driver = WebDriverProxy.newInstance(htmlUnit);

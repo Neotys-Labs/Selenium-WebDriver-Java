@@ -66,6 +66,7 @@ import static com.neotys.selenium.proxies.helpers.ModeHelper.*;
 public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, TransactionModifier {
 
 	private static final String TRANSACTION_TIMER_NAME = "Timer";
+	private static final String ISSUE_CONTACTING_DATA_EXCHANGE_API_MESSAGE = "Issue contacting DataExchangeAPI server. See documentation to disable the proxy.";
 
 	/** Absent means we haven't checked yet. If true then we get the name of the JUnit method to use in the path part of the Entry. */
     private static Optional<Boolean> hasJunit = Optional.absent();
@@ -304,27 +305,24 @@ public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, Transac
         cb.location(getSetting(OPT_LOCATION, getLocation()));
         cb.script(getScriptName());
 
-        DataExchangeAPIClient dataExchangeAPIClient = null;
+        final DataExchangeAPIClient client;
         try {
             final Context context = cb.build();
             debugMessage("Connecting to data exchange API server. URL: " + dataExchangeAPIURL +
                     ", API key: " + dataExchangeAPIKey + ", Context: " + context);
-            dataExchangeAPIClient = DataExchangeAPIClientFactory.newClient(dataExchangeAPIURL, context, dataExchangeAPIKey);
-        } catch (GeneralSecurityException | IOException | ODataException | URISyntaxException | NeotysAPIException e) {
-
-            // give a more specific error message for a common configuration issue.
-            if (StringUtils.trimToEmpty(dataExchangeAPIURL).toLowerCase().contains("localhost") &&
-                e instanceof NeotysAPIException &&
-                ((NeotysAPIException)e).getErrorType() == NeotysAPIException.ErrorType.NL_DATAEXCHANGE_NO_TEST_RUNNING) {
-
-                throw new RuntimeException("Disable the proxy or set the server URL. "
-                        + "If using a JAR file, settings must be specified before the JAR file. See documentation for details.", e);
-            }
-
-            throw new RuntimeException("Issue contacting DataExchangeAPI server. See documentation to disable the proxy.", e);
-        }
-
-        return Optional.of(dataExchangeAPIClient);
+            client = DataExchangeAPIClientFactory.newClient(dataExchangeAPIURL, context, dataExchangeAPIKey);
+        } catch(final NeotysAPIException npe){
+			// give a more specific error message for a common configuration issue.
+			if (StringUtils.trimToEmpty(dataExchangeAPIURL).toLowerCase().contains("localhost") &&
+					npe.getErrorType() == NeotysAPIException.ErrorType.NL_DATAEXCHANGE_NO_TEST_RUNNING) {
+				throw new RuntimeException("Disable the proxy or set the server URL. "
+						+ "If using a JAR file, settings must be specified before the JAR file. See documentation for details.", npe);
+			}
+			throw new RuntimeException(ISSUE_CONTACTING_DATA_EXCHANGE_API_MESSAGE, npe);
+		} catch (final Exception e) {
+			throw new RuntimeException(ISSUE_CONTACTING_DATA_EXCHANGE_API_MESSAGE, e);
+		}
+        return Optional.of(client);
     }
 
 	private String getOS() {
@@ -464,7 +462,7 @@ public class SeleniumProxyConfig implements CustomProxyConfig, NLLogger, Transac
     /** Returns the name of the junit test or an empty string if one is not found.
      * @return the most recent method on the stack annotated as a test.
      */
-    private static synchronized <T> String getJUnitTestName() {
+    private static synchronized String getJUnitTestName() {
         // check if we have junit or not.
         if (!hasJunit.isPresent()) {
             try {

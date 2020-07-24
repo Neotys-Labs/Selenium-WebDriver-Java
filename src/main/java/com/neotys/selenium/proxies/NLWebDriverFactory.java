@@ -32,6 +32,8 @@ import com.neotys.rest.design.client.DesignAPIClient;
 import com.neotys.rest.error.NeotysAPIException;
 import com.neotys.selenium.proxies.helpers.ModeHelper;
 import com.neotys.selenium.proxies.helpers.SeleniumProxyConfig;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
@@ -77,9 +79,9 @@ public class NLWebDriverFactory {
 
 	/**
 	 * If the design mode is chosen then the driver will use NeoLoad as Proxy.
-	 * @param capabilities capabilities modified ti use NeoLoad as Proxy.
+	 * @param capabilities capabilities modified to use NeoLoad as Proxy.
 	 */
-	public static DesiredCapabilities addProxyCapabilitiesIfNecessary(final DesiredCapabilities capabilities) {
+	public static <T extends Capabilities> T addProxyCapabilitiesIfNecessary(final T capabilities) {
 		if (!ModeHelper.Mode.DESIGN.equals(ModeHelper.getMode())) {
 			return capabilities;
 		}
@@ -101,8 +103,17 @@ public class NLWebDriverFactory {
 		proxy.setHttpProxy(proxyString);
 		proxy.setSslProxy(proxyString);
 
-		capabilities.setCapability(CapabilityType.PROXY, proxy);
-		capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+		if(capabilities instanceof DesiredCapabilities) {
+			final DesiredCapabilities desiredCapabilities = (DesiredCapabilities) capabilities;
+			desiredCapabilities.setCapability(CapabilityType.PROXY, proxy);
+			desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+		} else if (capabilities instanceof MutableCapabilities){
+			final MutableCapabilities mutableCapabilities = (MutableCapabilities) capabilities;
+			mutableCapabilities.setCapability(CapabilityType.PROXY, proxy);
+			mutableCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+		} else{
+			throw new IllegalStateException("Unsupported capability type, only support DesiredCapabilities and MutableCapabilities");
+		}
 		return capabilities;
 	}
 

@@ -69,7 +69,7 @@ public class PerfectoResultsHelper {
 	
 	private final NLLogger logger;
 
-	public PerfectoResultsHelper(final ProxySendHelper proxySendHelper, @Nonnull final RemoteWebDriver webDriver,
+	public PerfectoResultsHelper(@Nonnull final RemoteWebDriver webDriver,
 			final SeleniumProxyConfig proxyConfig, final long actualScriptStartTime) {
 		this.webDriver = webDriver;
 		this.proxyConfig = proxyConfig;
@@ -98,6 +98,10 @@ public class PerfectoResultsHelper {
 		// create some necessary variables.
 		final PerfectoCommandLineArguments perfectoCommandLineArguments = createPerfectoCommandLineArguments(executionID, scriptName);
 
+		if(perfectoCommandLineArguments == null){
+			//issue with perfecto API URL.
+			return;
+		}
 		// create some necessary variables.
 		final PerfectoConnectionParameters perfectoConnectionParameters = new PerfectoConnectionParameters(
 				perfectoCommandLineArguments.getParsedArgs(), perfectoCommandLineArguments);

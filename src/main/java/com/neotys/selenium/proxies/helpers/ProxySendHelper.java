@@ -27,22 +27,19 @@
  */
 package com.neotys.selenium.proxies.helpers;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.neotys.selenium.proxies.CustomProxyConfig;
 import com.neotys.selenium.proxies.TransactionModifier;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.neotys.selenium.proxies.CustomProxyConfig;
-import com.thoughtworks.selenium.Selenium;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author aaron
@@ -68,84 +65,16 @@ public class ProxySendHelper {
     /** Parses and sends results to perfecto. */
     private PerfectoResultsHelper perfectoResultsHelper = null;
     
-    /** Helps sends results to perfecto. */
-    private final WebDriver webDriver;
-    
     /** When the script begins. */
     private long actualScriptStartTime;
 
     /**
      * @param proxyConfig
-     * @param webDriver 
      */
-    public ProxySendHelper(final SeleniumProxyConfig proxyConfig, final WebDriver webDriver) {
+    public ProxySendHelper(final SeleniumProxyConfig proxyConfig) {
         this.proxyConfig = proxyConfig;
         this.wrapperUtils = new WrapperUtils(proxyConfig);
         this.actualScriptStartTime = System.currentTimeMillis();
-        this.webDriver = webDriver;
-    }
-
-    /**
-     * @param methodsAlwaysSend a list of methods for which to send data
-     * @param methodsSendOnExceptionOnly a list of methods for which to send data
-     * @param methodsSetLastAction
-     * @param webDriverBackedSelenium
-     * @param method the method to invoke
-     * @param args the args for the method
-     * @return
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    public Object sendAndReturn(final Collection<String> methodsAlwaysSend, final Collection<String> methodsSendOnExceptionOnly,
-            final Collection<String> methodsSetLastAction,
-            final Selenium webDriverBackedSelenium, final Method method, final Object[] args)
-            throws IllegalAccessException, InvocationTargetException {
-
-        try {
-        	// if we're calling a method on our wrapper then handle it.
-            if (isInvokedInSeleniumProxyConfig(method)) {
-                return method.invoke(proxyConfig, args);
-            }
-    
-            // set the last action if necessary
-            handleSetLastAction(methodsSetLastAction, method, args);
-    
-            // get the current url and title
-            Object returnValue = null;
-    
-            // always start the timer and create an entry, even if we don't use it.
-            final EntryHandler eh = EntryHandler.start(proxyConfig);
-            try {
-                returnValue = method.invoke(webDriverBackedSelenium, args);
-    
-            } catch (final Exception caughtException) {
-                final Throwable cause = caughtException.getCause();
-                
-                if (cause instanceof RuntimeException) {
-                    final RuntimeException rte = new RuntimeException(cause.getMessage() + " {\"method\":\"" + method.getName() + "\",\"params\":\"" + 
-                            Arrays.asList(args) + "\"}", cause);
-                    // if either list contains the method then we send the value.
-                    if (methodsSendOnExceptionOnly.contains(method.getName()) || methodsAlwaysSend.contains(method.getName())) {
-                        eh.sendEntryThrow(WrapperUtils.getURL(webDriverBackedSelenium), WrapperUtils.getTitle(webDriverBackedSelenium), rte, method.getName(),
-                                Collections.<String, Long> emptyMap());
-                    }
-                }
-                
-                throw caughtException;
-            }
-            
-            if (methodsAlwaysSend.contains(method.getName())) {
-                eh.sendEntry(WrapperUtils.getURL(webDriverBackedSelenium), WrapperUtils.getTitle(webDriverBackedSelenium), method.getName(), 
-                        Collections.<String, Long> emptyMap());
-                return returnValue;
-            }
-    
-            return returnValue;
-        } catch (final RuntimeException e) {
-        	proxyConfig.debug("Error from Selenium while calling method: " + method + " on class: " + webDriverBackedSelenium.getClass() + 
-        			" (" + e.getMessage() + ")");
-        	throw e;
-        }
     }
 
     /**
@@ -192,26 +121,9 @@ public class ProxySendHelper {
     
             // always start the timer and create an entry, even if we don't use it.
             final EntryHandler eh = EntryHandler.start(proxyConfig);
-            
-            try {
-                final Object methodReturnValue = method.invoke(original, args);
-				returnValue = wrapperUtils.wrapIfNecessary(webDriver, methodReturnValue);
-    
-            } catch (final Exception caughtException) {
-                final Throwable cause = caughtException.getCause();
-                
-                if (cause instanceof RuntimeException) {
-                    final RuntimeException rte = (RuntimeException)cause;
-                    // if either list contains the method then we send the value.
-                    if (methodsSendOnExceptionOnly.contains(method.getName()) || methodsAlwaysSend.contains(method.getName())) {
-                        eh.sendEntryThrow(WrapperUtils.getURL(webDriver), WrapperUtils.getTitle(webDriver), rte, method.getName(), getAdvancedValues(webDriver));
-                    }
-                }
-                
-            	handlePerfectoData(webDriver, method.getName(), "close");
-                throw caughtException;
-            }
-    
+
+            returnValue = doInvokeAndWrap(methodsAlwaysSend, methodsSendOnExceptionOnly, webDriver, original, method, args, eh);
+
             if (methodsAlwaysSend.contains(method.getName())) {
                 eh.sendEntry(WrapperUtils.getURL(webDriver), WrapperUtils.getTitle(webDriver), method.getName(), getAdvancedValues(webDriver));
 
@@ -228,21 +140,47 @@ public class ProxySendHelper {
         }
     }
 
+    private Object doInvokeAndWrap(final Collection<String> methodsAlwaysSend,
+                                   final Collection<String> methodsSendOnExceptionOnly,
+                                   final WebDriver webDriver, Object original,
+                                   final Method method,
+                                   final Object[] args,
+                                   final EntryHandler eh)
+            throws IllegalAccessException, InvocationTargetException {
+        Object returnValue;
+        try {
+            final Object methodReturnValue = method.invoke(original, args);
+            returnValue = wrapperUtils.wrapIfNecessary(webDriver, methodReturnValue);
+
+        } catch (final Exception caughtException) {
+            final Throwable cause = caughtException.getCause();
+
+            if (cause instanceof RuntimeException) {
+                final RuntimeException rte = (RuntimeException) cause;
+                // if either list contains the method then we send the value.
+                if (methodsSendOnExceptionOnly.contains(method.getName()) || methodsAlwaysSend.contains(method.getName())) {
+                    eh.sendEntryThrow(WrapperUtils.getURL(webDriver), WrapperUtils.getTitle(webDriver), rte, method.getName(), getAdvancedValues(webDriver));
+                }
+            }
+
+            handlePerfectoData(webDriver, method.getName(), "close");
+            throw caughtException;
+        }
+        return returnValue;
+    }
+
     private static boolean isInvokedInSeleniumProxyConfig(final Method method) {
         return method.getDeclaringClass().isAssignableFrom(CustomProxyConfig.class) || method.getDeclaringClass().isAssignableFrom(TransactionModifier.class);
     }
 
     private void handlePerfectoData(final WebDriver webDriver, final String actualMethodName, final String methodToMatch) {
-		if (methodToMatch.equals(actualMethodName)) {
-			if (webDriver != null && proxyConfig.isUsingPerfecto(webDriver)) {
-				if (perfectoResultsHelper == null) {
-			        this.perfectoResultsHelper = new PerfectoResultsHelper(this, (RemoteWebDriver) webDriver, proxyConfig, actualScriptStartTime);
-				}
-				
-				perfectoResultsHelper.sendResults();
-			}
-		}
-	}
+        if (methodToMatch.equals(actualMethodName) && webDriver != null && proxyConfig.isUsingPerfecto(webDriver)) {
+            if (perfectoResultsHelper == null) {
+                this.perfectoResultsHelper = new PerfectoResultsHelper((RemoteWebDriver) webDriver, proxyConfig, actualScriptStartTime);
+            }
+            perfectoResultsHelper.sendResults();
+        }
+    }
 	
     /** Use the dom to get values. From http://www.w3.org/TR/navigation-timing/
      * @param webDriver
@@ -332,7 +270,7 @@ public class ProxySendHelper {
      * @param value
      */
     private static void putIfNotNull(final Map<String, Long> map, final String key, final Long value) {
-        if (value == null) {
+        if (value == null || value < 0) {
             return;
         }
         

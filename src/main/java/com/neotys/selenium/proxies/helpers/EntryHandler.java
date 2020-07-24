@@ -125,7 +125,7 @@ public class EntryHandler {
 		final EntryBuilder ebNormal = new EntryBuilder(entryPath, startTime);
 		ebNormal.url(currentURL);
 		ebNormal.status(Statuses.newStatus(methodName, exception));
-		final double value = System.currentTimeMillis() - startTime;
+		final double value = (double)System.currentTimeMillis() - startTime;
 		ebNormal.value(value);
 		ebNormal.unit(TimerBuilder.DEFAULT_UNIT);
 

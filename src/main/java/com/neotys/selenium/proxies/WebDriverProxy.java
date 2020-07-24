@@ -48,6 +48,9 @@ import static com.neotys.selenium.proxies.MethodHandlers.*;
  */
 public class WebDriverProxy {
 
+    private WebDriverProxy(){
+    }
+
 	/**
      * Deprecated since 2.0.0, NLWebDriverFactory should be used instead.
      */

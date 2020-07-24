@@ -63,6 +63,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return webDriver.hashCode();
 	}
@@ -72,22 +73,16 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		return webDriver.equals(obj);
-	}
-
-	/**
-	 * @return
-	 * @see org.openqa.selenium.remote.RemoteWebDriver#getW3CStandardComplianceLevel()
-	 */
-	public int getW3CStandardComplianceLevel() {
-		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getW3CStandardComplianceLevel());
 	}
 
 	/**
 	 * @param detector
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#setFileDetector(org.openqa.selenium.remote.FileDetector)
 	 */
+	@Override
 	public void setFileDetector(FileDetector detector) {
 		remoteWebDriver.setFileDetector(detector);
 	}
@@ -96,6 +91,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getSessionId()
 	 */
+	@Override
 	public SessionId getSessionId() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getSessionId());
 	}
@@ -104,6 +100,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getErrorHandler()
 	 */
+	@Override
 	public ErrorHandler getErrorHandler() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getErrorHandler());
 	}
@@ -112,6 +109,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @param handler
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#setErrorHandler(org.openqa.selenium.remote.ErrorHandler)
 	 */
+	@Override
 	public void setErrorHandler(ErrorHandler handler) {
 		remoteWebDriver.setErrorHandler(handler);
 	}
@@ -120,6 +118,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getCommandExecutor()
 	 */
+	@Override
 	public CommandExecutor getCommandExecutor() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getCommandExecutor());
 	}
@@ -128,6 +127,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getCapabilities()
 	 */
+	@Override
 	public Capabilities getCapabilities() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getCapabilities());
 	}
@@ -136,6 +136,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @param url
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#get(java.lang.String)
 	 */
+	@Override
 	public void get(String url) {
 		webDriver.get(url);
 	}
@@ -144,6 +145,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getTitle()
 	 */
+	@Override
 	public String getTitle() {
 		return webDriver.getTitle();
 	}
@@ -152,6 +154,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getCurrentUrl()
 	 */
+	@Override
 	public String getCurrentUrl() {
 		return webDriver.getCurrentUrl();
 	}
@@ -162,6 +165,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @throws WebDriverException
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getScreenshotAs(org.openqa.selenium.OutputType)
 	 */
+	@Override
 	public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getScreenshotAs(outputType));
 	}
@@ -171,6 +175,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElements(org.openqa.selenium.By)
 	 */
+	@Override
 	public List<WebElement> findElements(By by) {
 		return webDriver.findElements(by);
 	}
@@ -180,6 +185,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElement(org.openqa.selenium.By)
 	 */
+	@Override
 	public WebElement findElement(By by) {
 		return webDriver.findElement(by);
 	}
@@ -189,6 +195,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementById(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementById(String using) {
 		return webDriver.findElement(By.id(using));
 	}
@@ -198,6 +205,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsById(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsById(String using) {
 		return webDriver.findElements(By.id(using));
 	}
@@ -207,6 +215,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByLinkText(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByLinkText(String using) {
 		return webDriver.findElement(By.linkText(using));
 	}
@@ -216,6 +225,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByLinkText(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByLinkText(String using) {
 		return webDriver.findElements(By.linkText(using));
 	}
@@ -225,6 +235,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByPartialLinkText(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByPartialLinkText(String using) {
 		return webDriver.findElement(By.partialLinkText(using));
 	}
@@ -234,6 +245,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByPartialLinkText(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByPartialLinkText(String using) {
 		return webDriver.findElements(By.partialLinkText(using));
 	}
@@ -243,6 +255,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByTagName(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByTagName(String using) {
 		return webDriver.findElement(By.tagName(using));
 	}
@@ -252,6 +265,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByTagName(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByTagName(String using) {
 		return webDriver.findElements(By.tagName(using));
 	}
@@ -261,6 +275,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByName(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByName(String using) {
 		return webDriver.findElement(By.name(using));
 	}
@@ -270,6 +285,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByName(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByName(String using) {
 		return webDriver.findElements(By.name(using));
 	}
@@ -279,6 +295,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByClassName(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByClassName(String using) {
 		return webDriver.findElement(By.className(using));
 	}
@@ -288,6 +305,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByClassName(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByClassName(String using) {
 		return webDriver.findElements(By.className(using));
 	}
@@ -297,6 +315,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByCssSelector(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByCssSelector(String using) {
 		return webDriver.findElement(By.cssSelector(using));
 	}
@@ -306,6 +325,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByCssSelector(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByCssSelector(String using) {
 		return webDriver.findElements(By.cssSelector(using));
 	}
@@ -315,6 +335,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementByXPath(java.lang.String)
 	 */
+	@Override
 	public WebElement findElementByXPath(String using) {
 		return webDriver.findElement(By.xpath(using));
 	}
@@ -324,6 +345,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#findElementsByXPath(java.lang.String)
 	 */
+	@Override
 	public List<WebElement> findElementsByXPath(String using) {
 		return webDriver.findElements(By.xpath(using));
 	}
@@ -332,6 +354,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getPageSource()
 	 */
+	@Override
 	public String getPageSource() {
 		return webDriver.getPageSource();
 	}
@@ -340,6 +363,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * 
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#close()
 	 */
+	@Override
 	public void close() {
 		webDriver.close();
 	}
@@ -348,6 +372,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * 
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#quit()
 	 */
+	@Override
 	public void quit() {
 		webDriver.quit();
 	}
@@ -356,6 +381,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getWindowHandles()
 	 */
+	@Override
 	public Set<String> getWindowHandles() {
 		return webDriver.getWindowHandles();
 	}
@@ -364,6 +390,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getWindowHandle()
 	 */
+	@Override
 	public String getWindowHandle() {
 		return webDriver.getWindowHandle();
 	}
@@ -374,6 +401,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#executeScript(java.lang.String, java.lang.Object[])
 	 */
+	@Override
 	public Object executeScript(String script, Object... args) {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.executeScript(script, args));
 	}
@@ -384,6 +412,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#executeAsyncScript(java.lang.String, java.lang.Object[])
 	 */
+	@Override
 	public Object executeAsyncScript(String script, Object... args) {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.executeAsyncScript(script, args));
 	}
@@ -392,6 +421,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#switchTo()
 	 */
+	@Override
 	public TargetLocator switchTo() {
 		return webDriver.switchTo();
 	}
@@ -400,6 +430,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#navigate()
 	 */
+	@Override
 	public Navigation navigate() {
 		return webDriver.navigate();
 	}
@@ -408,6 +439,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#manage()
 	 */
+	@Override
 	public Options manage() {
 		return webDriver.manage();
 	}
@@ -416,6 +448,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @param level
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#setLogLevel(java.util.logging.Level)
 	 */
+	@Override
 	public void setLogLevel(Level level) {
 		remoteWebDriver.setLogLevel(level);
 	}
@@ -424,6 +457,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getKeyboard()
 	 */
+	@Override
 	public Keyboard getKeyboard() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getKeyboard());
 	}
@@ -432,6 +466,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getMouse()
 	 */
+	@Override
 	public Mouse getMouse() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getMouse());
 	}
@@ -440,6 +475,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#getFileDetector()
 	 */
+	@Override
 	public FileDetector getFileDetector() {
 		return wrapperUtils.wrapIfNecessary(webDriver, remoteWebDriver.getFileDetector());
 	}
@@ -448,6 +484,7 @@ public class NLPerfectoWebDriver extends NLRemoteWebDriver{
 	 * @return
 	 * @see org.openqa.selenium.remote.RemoteWebDriver#toString()
 	 */
+	@Override
 	public String toString() {
 		return webDriver.toString();
 	}

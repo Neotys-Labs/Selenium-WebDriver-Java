@@ -81,12 +81,12 @@ public class SeleniumHttpClientImpl extends PerfectoHttpClientImpl {
 		boolean downloadSuccessful = false;
 		Files.delete(perfectoScriptResultsFileHTML.toPath());
 		logger.debug("Downloading report to " + perfectoScriptResultsFileHTML.toPath());
-		responseContentHTML = PerfectoLabUtils.downloadReport(webDriver, "html", perfectoScriptResultsFileHTML.getAbsolutePath());
+		responseContentHTML = PerfectoLabUtils.downloadReport(webDriver, "html");
 		FileUtils.write(new File(perfectoScriptResultsFileHTML.getAbsolutePath()), responseContentHTML);
 
 		Files.delete(perfectoScriptResultsFileXML.toPath());
 		logger.debug("Downloading report to " + perfectoScriptResultsFileXML.toPath());
-		responseContentXML = PerfectoLabUtils.downloadReport(webDriver, "xml", perfectoScriptResultsFileXML.getAbsolutePath());
+		responseContentXML = PerfectoLabUtils.downloadReport(webDriver, "xml");
 		FileUtils.write(new File(perfectoScriptResultsFileXML.getAbsolutePath()), responseContentXML);
 		
 		try {

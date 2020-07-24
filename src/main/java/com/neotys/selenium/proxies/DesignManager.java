@@ -49,8 +49,6 @@ import java.security.GeneralSecurityException;
  */
 public class DesignManager {
 
-	private static final int SLEEP_TIME = 2000;
-
 	public static DesignAPIClient getDesignApiClient() {
 		Preconditions.checkState(SeleniumProxyConfig.getDesignAPIClient().isPresent(), "Design API client is not initialized.");
 		return SeleniumProxyConfig.getDesignAPIClient().get();
@@ -90,17 +88,21 @@ public class DesignManager {
 		try {
 			designAPIClient.startRecording(startRecordingBuilder.build());
 		} catch (IOException | GeneralSecurityException | URISyntaxException | NeotysAPIException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			handleDesignClientException(e);
 		}
+	}
+
+	private void handleDesignClientException(final Exception e) {
+		e.printStackTrace();
+		throw new NeotysDesignClientException(e);
 	}
 
 	private boolean containsUserPath(final DesignAPIClient designAPIClient) {
 		try {
 			return designAPIClient.containsUserPath(new ContainsUserPathParamsBuilder().name(userPathName).build());
 		} catch (final IOException | GeneralSecurityException | URISyntaxException | NeotysAPIException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			handleDesignClientException(e);
+			return false;
 		}
 	}
 
@@ -112,8 +114,7 @@ public class DesignManager {
 				designAPIClient.openProject(new OpenProjectParamsBuilder().filePath(projectPath.get()).build());
 			}
 		} catch (final IOException | GeneralSecurityException | URISyntaxException | NeotysAPIException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			handleDesignClientException(e);
 		}
 	}
 
@@ -128,15 +129,13 @@ public class DesignManager {
 		try {
 			getDesignApiClient().stopRecording(stopRecordParams.build());
 		} catch (final IOException | GeneralSecurityException | URISyntaxException | NeotysAPIException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			handleDesignClientException(e);
 		}
 
 		try {
 			getDesignApiClient().saveProject();
 		} catch (final IOException | GeneralSecurityException | URISyntaxException | NeotysAPIException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			handleDesignClientException(e);
 		}
 	}
 }

@@ -27,12 +27,7 @@
  */
 package com.neotys.selenium.proxies.helpers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.neotys.selenium.proxies.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
@@ -42,15 +37,7 @@ import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import com.neotys.selenium.proxies.KeyboardProxy;
-import com.neotys.selenium.proxies.MouseProxy;
-import com.neotys.selenium.proxies.NavigationProxy;
-import com.neotys.selenium.proxies.OptionsProxy;
-import com.neotys.selenium.proxies.RemoteWebElementWrapper;
-import com.neotys.selenium.proxies.TargetLocatorProxy;
-import com.neotys.selenium.proxies.WebDriverProxy;
-import com.neotys.selenium.proxies.WebElementProxy;
-import com.thoughtworks.selenium.Selenium;
+import java.util.*;
 
 /**
  * @author ajohnson
@@ -88,14 +75,10 @@ public class WrapperUtils {
             return (T)new TargetLocatorProxy(webDriver, (TargetLocator) instanceToWrap, proxyConfig).getProxy();
 
         } else if (instanceToWrap instanceof WebDriver) {
-            return (T)WebDriverProxy.newInstance(webDriver);
+            return (T)WebDriverProxy.newEueInstance(webDriver);
 
         } else if (instanceToWrap instanceof RemoteWebElement) {
-        	try {
-				return (T)new RemoteWebElementWrapper(webDriver, (RemoteWebElement) instanceToWrap, proxyConfig);
-			} catch (final Exception e) {
-				return (T)new WebElementProxy(webDriver, (WebElement) instanceToWrap, proxyConfig).getProxy();
-			}
+        	return (T)new RemoteWebElementWrapper(webDriver, (RemoteWebElement) instanceToWrap, proxyConfig);
 
         } else if (instanceToWrap instanceof WebElement) {
             return (T)new WebElementProxy(webDriver, (WebElement) instanceToWrap, proxyConfig).getProxy();
@@ -152,36 +135,6 @@ public class WrapperUtils {
 
 		return title;
 	}
-
-    /** Ignore exceptions when getting the current URL. For use with Selendroid.
-     * @param webDriver
-     * @return
-     */
-    public static String getURL(final Selenium webDriver) {
-        String url = "";
-        try {
-            url = webDriver.getLocation();
-        } catch (final Exception e) {
-            // ignored
-        }
-
-        return url;
-    }
-
-    /** Ignore exceptions when getting the current page title. For use with Selendroid.
-     * @param webDriver
-     * @return
-     */
-    public static String getTitle(final Selenium webDriver) {
-        String title = "";
-        try {
-            title = webDriver.getTitle();
-        } catch (final Exception e) {
-            // ignored
-        }
-
-        return title;
-    }
     
     /**
      * @param concreteClasses

@@ -49,7 +49,7 @@ public class ProxySendHelperTest {
     public void testGetAdvancedValuesFireFox() {
         final WebDriver firefoxDriver = new FirefoxDriver();
         
-        final ProxySendHelper proxySendHelper = new ProxySendHelper(new SeleniumProxyConfig("any"), firefoxDriver);
+        final ProxySendHelper proxySendHelper = new ProxySendHelper(new SeleniumProxyConfig("any"));
 
         try {
             final Map<String, Long> advancedValuesFF = proxySendHelper.getAdvancedValues(firefoxDriver);
@@ -70,7 +70,7 @@ public class ProxySendHelperTest {
     public void testGetAdvancedValuesHtmlUnit() {
         final WebDriver htmlUnitDriver = new HtmlUnitDriver();
 
-        final ProxySendHelper proxySendHelper = new ProxySendHelper(new SeleniumProxyConfig("any"), htmlUnitDriver);
+        final ProxySendHelper proxySendHelper = new ProxySendHelper(new SeleniumProxyConfig("any"));
         
         try {
             final Map<String, Long> advancedValuesHU = proxySendHelper.getAdvancedValues(htmlUnitDriver);

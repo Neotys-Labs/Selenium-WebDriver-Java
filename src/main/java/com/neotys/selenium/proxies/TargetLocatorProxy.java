@@ -84,7 +84,7 @@ public class TargetLocatorProxy {
                 return method.invoke(original, args);
             }
 
-            return new ProxySendHelper(proxyConfig, webDriver).sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY, 
+            return new ProxySendHelper(proxyConfig).sendAndReturn(METHODS_ALWAYS_SEND, METHODS_SEND_ON_EXCEPTION_ONLY,
             		Collections.<String> emptyList(), webDriver, original, method, args);
         }
     };
