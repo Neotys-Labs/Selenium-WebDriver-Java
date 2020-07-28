@@ -21,7 +21,7 @@ Read the [Integration with Selenium](https://www.neotys.com/documents/doc/neoloa
 
 ## Changelog
 
-- Version 3.0.0 (July 24, 2020)
+- Version 3.0.1 (July 24, 2020)
     - IMPROVED: Update method addProxyCapabilitiesIfNecessary for latest selenium version.
     - FIXED: Negative response time retrieved when page loaded without the "loadEventStart" event sent.
     - IMPROVED: Review exception handling for Design API Client manager.
